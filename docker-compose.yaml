@@ -1,0 +1,28 @@
+version: '3'
+services:
+  db:
+    networks:
+      - webnet
+    container_name: postgres_db
+    image: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: weather_app
+  app:
+    networks:
+      - webnet
+    container_name: app
+    env_file:
+      - .env
+    restart: on-failure
+    build: .
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+
+networks:
+  webnet:
